@@ -32,7 +32,7 @@ function create-dotfile-repo() {
 checkout = vcsh clone $clone_url $nodot
 " > ~/.config/mr/available.d/$nodot.vcsh
     pushd ~/.config/mr/config.d
-    ln -s ../available/$nodot.vcsh
+    ln -s ../available.d/$nodot.vcsh
     popd
     vcsh mr add .config/mr/available.d/$nodot.vcsh
     vcsh mr add .config/mr/config.d/$nodot.vcsh

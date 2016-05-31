@@ -60,7 +60,7 @@ function create-repo-github() {
 }
 
 function create-repo.private/bitbucket() {
-  echo 'WARN: Does not work with 2FA. See https:/.private/bitbucket.org/site/master/issues/11774/application-specific-passwords-or-tokensApplication%20specific%20passwords' >&2
+  echo 'WARN: Does not work with 2FA. See https://bitbucket.org/site/master/issues/11774/application-specific-passwords-or-tokens' >&2
   if (( $# != 1 ))
   then
     echo "Usage: create-repo.private/bitbucket reponame"
@@ -77,11 +77,13 @@ function create-repo.private/bitbucket() {
   user=$(cat ~/.private/bitbucket-user)
   curl -X POST -v -u $user:$(cat ~/.private/bitbucket-pass) -H "Content-Type: application/json" \
     https://api.bitbucket.org/2.0/repositories/$user/$1           \
-  -d '{"scm": "git",                    \
-      "is_private": "true",             \
-      "fork_policy": "no_public_forks", \
-      "has_issues": "true"              \
-      }'
+  -d "{                                     \
+      \"owner\": \"$user\",                 \
+      \"repo_slug\": \"$1\",                 \
+      \"is_private\": \"true\",             \
+      \"fork_policy\": \"no_public_forks\", \
+      \"has_issues\": \"true\"              \
+      }"
 }
 
 function awsdefaultprofile() {

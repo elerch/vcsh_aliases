@@ -2,7 +2,7 @@ alias ll="ls -la"
 alias keygen="ssh-keygen -t ed25519 -o"
 alias keygen-rsa="ssh-keygen -o -b 4096"
 alias keygen-rsa-low="ssh-keygen -b 4096"
-alias create-repo-aws="aws --region us-east-1 codecommit create-repository --repository-name"
+alias create-repo-aws="aws --region us-west-2 codecommit create-repository --repository-name"
 alias sshx="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
 function create-dotfile-repo() {

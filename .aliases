@@ -1,8 +1,11 @@
+hash vim 2>/dev/null && alias vi=vim
+
 alias ll="ls -la"
+
 alias keygen="ssh-keygen -t ed25519 -o"
 alias keygen-rsa="ssh-keygen -o -b 4096"
 alias keygen-rsa-low="ssh-keygen -b 4096"
-alias create-repo-aws="aws --region us-west-2 codecommit create-repository --repository-name"
+
 alias sshx="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
 function create-dotfile-repo() {
@@ -41,6 +44,9 @@ checkout = vcsh clone $clone_url $nodot
   echo "vcsh push to push all changes"
 }
 
+# Create repos at various providers
+
+alias create-repo-aws="aws --region us-west-2 codecommit create-repository --repository-name"
 function create-repo-github() {
   if (( $# != 1 ))
   then

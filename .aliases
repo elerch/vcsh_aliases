@@ -7,6 +7,8 @@ alias keygen-rsa="ssh-keygen -o -b 4096"
 alias keygen-rsa-low="ssh-keygen -b 4096"
 
 alias sshx="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+hash less 2>/dev/null && \
+  alias more=less
 
 function create-dotfile-repo() {
   if (( $# != 1 ))

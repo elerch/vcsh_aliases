@@ -22,7 +22,6 @@ function create-dotfile-repo() {
   clone_url=$(echo $github_out | fgrep clone_url | cut -f 2- -d : |cut -f 2 -d \")
   vcsh clone $ssh_url $nodot
   vcsh $nodot add -f $1
-  vcsh $nodot aliases remote add origin $ssh_url
 
   # Add .gitignore. See http://www.martin-burger.net/blog/unix-shell/manage-dotfiles-quickly-and-effortlessly/
   vcsh write-gitignore $nodot
@@ -31,6 +30,7 @@ function create-dotfile-repo() {
   vcsh $nodot add .gitignore.d/$nodot 
 
   vcsh $nodot commit -m 'initial commit'
+  vcsh $nodot push
 
   if [ -d ~/.config/mr ]; then
     echo "[\$HOME/.config/vcsh/repo.d/$nodot.git]
@@ -39,8 +39,8 @@ checkout = vcsh clone $clone_url $nodot
     pushd ~/.config/mr/config.d
     ln -s ../available.d/$nodot.vcsh
     popd
-    vcsh mr add .config/mr/available.d/$nodot.vcsh
-    vcsh mr add .config/mr/config.d/$nodot.vcsh
+    vcsh mr add -f .config/mr/available.d/$nodot.vcsh
+    vcsh mr add -f .config/mr/config.d/$nodot.vcsh
     vcsh mr commit -m "add $nodot to configuration"
   fi
   echo "vcsh push to push all changes"

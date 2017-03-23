@@ -102,7 +102,7 @@ function awsdefaultprofile() {
 
   export AWS_DEFAULT_PROFILE=$1
 }
-
+alias awsprofiles="cat ~/.aws/config |grep -F \[profile |cut -d ' ' -f2 |cut -d ']' -f1"
 function awsaccountnumber() {
   aws sts get-caller-identity --output text --query 'Account'
 }

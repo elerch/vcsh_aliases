@@ -1,108 +1,31 @@
-hash vim 2>/dev/null && alias vi=vim
-
 alias ll="ls -la"
 
-alias keygen="ssh-keygen -t ed25519 -o"
+# Best keygen options go here
+# -o uses bcrypt for key derivation
+# -a is number of rounds
+# see https://blog.g3rt.nl/upgrade-your-ssh-keys.html
+alias keygen-secure="ssh-keygen -t ed25519 -o -a"
+
+# Fallback to RSA for those that can't handle elliptic curves
 alias keygen-rsa="ssh-keygen -o -b 4096"
+# Fall even further back if bcrypt key derivation is not supported
 alias keygen-rsa-low="ssh-keygen -b 4096"
 
-alias sshx="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+# ssh without host verification for one-off connections to ephemeral hosts
+alias ssh-no-verify="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+# Always use less if available
 hash less 2>/dev/null && \
   alias more=less
 
-function create-dotfile-repo() {
-  if (( $# != 1 ))
-  then
-    echo "Usage: create-dotfile-repo dotfile"
-    return 1
-  fi
-  nodot=$(echo $1|cut -c 2-)
-  github_out=$(create-repo-github vcsh_$nodot)
-  ssh_url=$(echo $github_out | fgrep ssh_url | cut -f 2- -d : |cut -f 2 -d \")
-  clone_url=$(echo $github_out | fgrep clone_url | cut -f 2- -d : |cut -f 2 -d \")
-  vcsh clone $ssh_url $nodot
-  vcsh $nodot add -f $1
+# Always prefer vim over vi (if available)
+hash vim 2>/dev/null && alias vi=vim
 
-  # Add .gitignore. See http://www.martin-burger.net/blog/unix-shell/manage-dotfiles-quickly-and-effortlessly/
-  vcsh write-gitignore $nodot
-  vcsh $nodot add -f .gitignore.d/$nodot
-  vcsh write-gitignore $nodot
-  vcsh $nodot add .gitignore.d/$nodot 
-
-  vcsh $nodot commit -m 'initial commit'
-  vcsh $nodot push
-
-  if [ -d ~/.config/mr ]; then
-    echo "[\$HOME/.config/vcsh/repo.d/$nodot.git]
-checkout = vcsh clone $clone_url $nodot
-" > ~/.config/mr/available.d/$nodot.vcsh
-    pushd ~/.config/mr/config.d
-    ln -s ../available.d/$nodot.vcsh
-    popd
-    vcsh mr add -f .config/mr/available.d/$nodot.vcsh
-    vcsh mr add -f .config/mr/config.d/$nodot.vcsh
-    vcsh mr commit -m "add $nodot to configuration"
-  fi
-  echo "vcsh push to push all changes"
-}
-
-# Create repos at various providers
-
+# Outside AWS this is much trickier, so functions are required (see .functions)
 alias create-repo-aws="aws --region us-west-2 codecommit create-repository --repository-name"
-function create-repo-github() {
-  if (( $# != 1 ))
-  then
-    echo "Usage: create-repo-github reponame"
-    return 1
-  fi
-  if [ ! -f ~/.private/github-user ]; then
-    echo '~/.private/github-user not found'
-    return 1
-  fi
-  if [ ! -f ~/.private/github-tok ]; then
-    echo '~/.private/github-tok not found'
-    return 1
-  fi
 
-  curl -s -u $(cat ~/.private/github-user):$(cat ~/.private/github-tok) https://api.github.com/user/repos -d "{\"name\":\"$1\"}"
-}
-
-function create-repo.private/bitbucket() {
-  if (( $# != 1 ))
-  then
-    echo "Usage: create-repo.private/bitbucket reponame"
-    return 1
-  fi
-  if [ ! -f ~/.private/bitbucket-user ]; then
-    echo '~/.private/bitbucket-user not found'
-    return 1
-  fi
-  if [ ! -f ~/.private/bitbucket-pass ]; then
-    echo '~/.private/bitbucket-pass not found'
-    return 1
-  fi
-  user=$(cat ~/.private/bitbucket-user)
-  curl -X POST -v -u $user:$(cat ~/.private/bitbucket-pass) -H "Content-Type: application/json" \
-    https://api.bitbucket.org/2.0/repositories/$user/$1           \
-  -d "{                                     \
-      \"owner\": \"$user\",                 \
-      \"repo_slug\": \"$1\",                 \
-      \"is_private\": \"true\",             \
-      \"fork_policy\": \"no_public_forks\", \
-      \"has_issues\": \"true\"              \
-      }"
-}
-
-function awsdefaultprofile() {
-  if (( $# != 1 ))
-  then
-    echo "AWS_DEFAULT_PROFILE=$AWS_DEFAULT_PROFILE"
-    return 0
-  fi
-
-  export AWS_DEFAULT_PROFILE=$1
-}
-alias awsprofiles="cat ~/.aws/config |grep -F \[profile |cut -d ' ' -f2 |cut -d ']' -f1"
-function awsaccountnumber() {
-  aws sts get-caller-identity --output text --query 'Account'
-}
+# I like to keep all AWS stuff namespaced similarly, but create-repo-* is nice
+# too
+alias aws-create-repo=create-repo-aws
+alias aws-new-cfntemplate="curl -L https://gist.githubusercontent.com/elerch/a8303c92638bce72e6fedd5c8848e140/raw/ab1d6c38127c7c12d9f32917edc2f797e35305af/cloudformation-template-shell.yaml -o "
+alias aws-profiles="cat ~/.aws/config |grep -F \[profile |cut -d ' ' -f2 |cut -d ']' -f1"

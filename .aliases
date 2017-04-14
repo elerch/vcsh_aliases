@@ -29,3 +29,11 @@ alias create-repo-aws="aws --region us-west-2 codecommit create-repository --rep
 alias aws-create-repo=create-repo-aws
 alias aws-new-cfntemplate="curl -L https://gist.githubusercontent.com/elerch/a8303c92638bce72e6fedd5c8848e140/raw/ab1d6c38127c7c12d9f32917edc2f797e35305af/cloudformation-template-shell.yaml -o "
 alias aws-profiles='cat ~/.aws/config |grep -F "[profile" |cut -d \  -f2 |cut -d \] -f1'
+
+# Setup aliases for all profiles in AWS config
+if [ -r ~/.aws/config ]; then
+  for profile in $(cat ~/.aws/config |grep -F "[profile" |cut -d \  -f2 |cut -d \] -f1); do
+    alias aws-profile-${profile}="export AWS_DEFAULT_PROFILE=$profile"
+  done
+  alias aws-default-profile="unset AWS_DEFAULT_PROFILE"
+fi

@@ -37,3 +37,6 @@ if [ -r ~/.aws/config ]; then
   done
   alias aws-default-profile="unset AWS_DEFAULT_PROFILE"
 fi
+
+[ -r $HOME/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
+  alias zsh-autosuggestions="source $HOME/zsh-autosuggestions/zsh-autosuggestions.zsh"

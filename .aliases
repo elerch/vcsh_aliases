@@ -41,5 +41,5 @@ fi
 [ -r $HOME/.zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
   alias zsh-autosuggestions="source $HOME/.zsh-autosuggestions/zsh-autosuggestions.zsh"
 
-alias restart-gpg-agent="pkill -U $USER gpg-agent; eval $(gpg-agent --daemon --enable-ssh-support)"
+alias restart-gpg-agent='pkill -U $USER gpg-agent; eval $(gpg-agent --daemon --enable-ssh-support)'
 

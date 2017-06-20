@@ -14,6 +14,8 @@ alias keygen-rsa-low="ssh-keygen -b 4096"
 # ssh without host verification for one-off connections to ephemeral hosts
 alias ssh-no-verify="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
+alias import-gpg-key-emil-master="curl https://emil.lerch.org/3125C87C.asc | gpg --import"
+
 # Always use less if available
 hash less 2>/dev/null && \
   alias more=less

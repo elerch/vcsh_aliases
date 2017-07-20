@@ -4,7 +4,7 @@ alias ll="ls -la"
 # -o uses bcrypt for key derivation
 # -a is number of rounds
 # see https://blog.g3rt.nl/upgrade-your-ssh-keys.html
-alias keygen-secure="ssh-keygen -t ed25519 -o -a"
+alias keygen-secure="ssh-keygen -t ed25519 -a 100 -o"
 
 # Fallback to RSA for those that can't handle elliptic curves
 alias keygen-rsa="ssh-keygen -o -b 4096"

@@ -22,6 +22,17 @@ hash less 2>/dev/null && \
 
 # Always prefer vim over vi (if available)
 hash vim 2>/dev/null && alias vi=vim
+# Always prefer nvim over vim (if available)
+if hash nvim 2>/dev/null; then
+  alias vi=nvim
+  alias vim=nvim
+  # Setup nvim init to reference vimrc if file doesn't exist
+  [ ! -r $HOME/.config/nvim/init.vim ] && \
+    mkdir -p $HOME/.config/nvim && \
+    echo 'set runtimepath^=~/.vim runtimepath+=~/.vim/after
+let &packpath = &runtimepath
+source ~/.vimrc' > $HOME/.config/nvim/init.vim
+fi
 
 # Outside AWS this is much trickier, so functions are required (see .functions)
 alias create-repo-aws="aws --region us-west-2 codecommit create-repository --repository-name"

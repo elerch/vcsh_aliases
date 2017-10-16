@@ -16,6 +16,9 @@ alias ssh-no-verify="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyCheckin
 
 alias import-gpg-key-emil-master="curl https://emil.lerch.org/3125C87C.asc | gpg --import"
 
+# If gpg2 < version 2.2.0 is installed, we can alias it
+hash gpg2 2>/dev/null && alias gpg=gpg2
+
 # Always use less if available
 hash less 2>/dev/null && \
   alias more=less

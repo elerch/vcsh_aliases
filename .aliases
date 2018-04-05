@@ -17,16 +17,15 @@ alias ssh-no-verify="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyCheckin
 alias import-gpg-key-emil-master="curl https://emil.lerch.org/3125C87C.asc | gpg --import"
 
 # If gpg2 < version 2.2.0 is installed, we can alias it
-hash gpg2 2>/dev/null && alias gpg=gpg2
+command_exists gpg2 && alias gpg=gpg2
 
 # Always use less if available
-hash less 2>/dev/null && \
-  alias more=less
+command_exists less && alias more=less
 
 # Always prefer vim over vi (if available)
-hash vim 2>/dev/null && alias vi=vim
+command_exists vim && alias vi=vim
 # Always prefer nvim over vim (if available)
-if hash nvim 2>/dev/null; then
+if command_exists nvim; then
   alias vi=nvim
   alias vim=nvim
   # Setup nvim init to reference vimrc if file doesn't exist

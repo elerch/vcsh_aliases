@@ -32,8 +32,8 @@ if command_exists nvim; then
   [ ! -r $HOME/.config/nvim/init.vim ] && \
     mkdir -p $HOME/.config/nvim && \
     echo 'set runtimepath^=~/.vim runtimepath+=~/.vim/after
-let &packpath = &runtimepath
-source ~/.vimrc' > $HOME/.config/nvim/init.vim
+  let &packpath = &runtimepath
+  source ~/.vimrc' > $HOME/.config/nvim/init.vim
 fi
 
 # Outside AWS this is much trickier, so functions are required (see .functions)

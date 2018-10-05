@@ -48,9 +48,17 @@ alias aws-profiles='cat ~/.aws/config |grep -F "[profile" |cut -d \  -f2 |cut -d
 # Setup aliases for all profiles in AWS config
 if [ -r ~/.aws/config ]; then
   for profile in $(cat ~/.aws/config |grep -F "[profile" |cut -d \  -f2 |cut -d \] -f1); do
-    alias aws-profile-${profile}="export AWS_DEFAULT_PROFILE=$profile"
+    if $(command_exists aws-vault); then
+      alias aws-profile-${profile}="aws-vault exec $profile $SHELL"
+    else
+      alias aws-profile-${profile}="export AWS_DEFAULT_PROFILE=$profile"
+    fi
   done
-  alias aws-default-profile="unset AWS_DEFAULT_PROFILE"
+  if $(command_exists aws-vault); then
+    alias aws-default-profile="exit"
+  else
+    alias aws-default-profile="unset AWS_DEFAULT_PROFILE"
+  fi
 fi
 
 [ -r $HOME/.zsh-autosuggestions/zsh-autosuggestions.zsh ] && \

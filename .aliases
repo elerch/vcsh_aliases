@@ -4,17 +4,17 @@ alias ll="ls -la"
 # -o uses bcrypt for key derivation
 # -a is number of rounds
 # see https://blog.g3rt.nl/upgrade-your-ssh-keys.html
-alias keygen-secure="ssh-keygen -t ed25519 -a 100 -o"
+alias keygen_secure="ssh-keygen -t ed25519 -a 100 -o"
 
 # Fallback to RSA for those that can't handle elliptic curves
-alias keygen-rsa="ssh-keygen -o -b 4096"
+alias keygen_rsa="ssh-keygen -o -b 4096"
 # Fall even further back if bcrypt key derivation is not supported
-alias keygen-rsa-low="ssh-keygen -b 4096"
+alias keygen_rsa_low="ssh-keygen -b 4096"
 
 # ssh without host verification for one-off connections to ephemeral hosts
-alias ssh-no-verify="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+alias ssh_no_verify="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
-alias import-gpg-key-emil-master="curl https://emil.lerch.org/3125C87C.asc | gpg --import"
+alias import_gpg_key_emil_master="curl https://emil.lerch.org/3125C87C.asc | gpg --import"
 
 # If gpg2 < version 2.2.0 is installed, we can alias it
 command_exists gpg2 && alias gpg=gpg2
@@ -29,47 +29,49 @@ if command_exists nvim; then
   alias vi=nvim
   alias vim=nvim
   # Setup nvim init to reference vimrc if file doesn't exist
-  [ ! -r $HOME/.config/nvim/init.vim ] && \
-    mkdir -p $HOME/.config/nvim && \
+  [ ! -r "$HOME"/.config/nvim/init.vim ] && \
+    mkdir -p "$HOME"/.config/nvim && \
     echo 'set runtimepath^=~/.vim runtimepath+=~/.vim/after
   let &packpath = &runtimepath
-  source ~/.vimrc' > $HOME/.config/nvim/init.vim
+  source ~/.vimrc' > "$HOME"/.config/nvim/init.vim
 fi
 
 # Outside AWS this is much trickier, so functions are required (see .functions)
-alias create-repo-aws="aws --region us-west-2 codecommit create-repository --repository-name"
+alias create_repo_aws="aws --region us-west-2 codecommit create-repository --repository-name"
 
 # I like to keep all AWS stuff namespaced similarly, but create-repo-* is nice
 # too
-alias aws-create-repo=create-repo-aws
-alias aws-new-cfntemplate="curl -L https://gist.githubusercontent.com/elerch/a8303c92638bce72e6fedd5c8848e140/raw/ab1d6c38127c7c12d9f32917edc2f797e35305af/cloudformation-template-shell.yaml -o "
-alias aws-profiles='cat ~/.aws/config |grep -F "[profile" |cut -d \  -f2 |cut -d \] -f1'
+alias aws_create_repo=create_repo_aws
+alias aws_new_cfntemplate="curl -L https://gist.githubusercontent.com/elerch/a8303c92638bce72e6fedd5c8848e140/raw/ab1d6c38127c7c12d9f32917edc2f797e35305af/cloudformation-template-shell.yaml -o "
+alias aws_profiles='cat ~/.aws/config |grep -F "[profile" |cut -d \  -f2 |cut -d \] -f1'
 
 # Setup aliases for all profiles in AWS config
 if [ -r ~/.aws/config ]; then
-  for profile in $(cat ~/.aws/config |grep -F "[profile" |cut -d \  -f2 |cut -d \] -f1); do
-    if $(command_exists aws-vault); then
-      alias aws-profile-${profile}="aws-vault exec $profile $SHELL"
+  grep -F "[profile" "$HOME"/.aws/config |cut -d \  -f2 |cut -d \] -f1 | while read -r profile; do
+    if command_exists aws-vault; then
+      # shellcheck disable=SC2139
+      alias aws_profile_"${profile}=aws-vault exec $profile $SHELL"
     else
-      alias aws-profile-${profile}="export AWS_DEFAULT_PROFILE=$profile"
+      # shellcheck disable=SC2139
+      alias aws_profile_"${profile}=export AWS_DEFAULT_PROFILE=$profile"
     fi
   done
-  if $(command_exists aws-vault); then
-    if [ -z $AWS_VAULT ]; then
+  if command_exists aws-vault; then
+    if [ -z "$AWS_VAULT" ]; then
       # AWS_VAULT is *not* set - we want to enter a subshell
-      alias aws-default-profile="aws-vault exec default $SHELL"
+      alias aws_default_profile='aws-vault exec default $SHELL'
     else
       # AWS_VAULT is set - we are in a subshell, so just exit
-      alias aws-default-profile="exit"
+      alias aws_default_profile="exit"
     fi
   else
-    alias aws-default-profile="unset AWS_DEFAULT_PROFILE"
+    alias aws_default_profile="unset AWS_DEFAULT_PROFILE"
   fi
 fi
 
-[ -r $HOME/.zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
-  alias zsh-autosuggestions="source $HOME/.zsh-autosuggestions/zsh-autosuggestions.zsh"
+[ -r "$HOME"/.zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
+  alias zsh_autosuggestions='source $HOME/.zsh-autosuggestions/zsh-autosuggestions.zsh'
 
-alias restart-gpg-agent='pkill -U $USER gpg-agent; eval $(gpg-agent --daemon --enable-ssh-support)'
+alias restart_gpg_agent='pkill -U $USER gpg-agent; eval $(gpg-agent --daemon --enable-ssh-support)'
 
-alias java-mvn-new-console='mvn archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.1'
+alias java_mvn_new_console='mvn archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.1'

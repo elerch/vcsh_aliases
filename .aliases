@@ -36,6 +36,9 @@ if command_exists nvim; then
   source ~/.vimrc' > "$HOME"/.config/nvim/init.vim
 fi
 
+# Use podman if it exists, and docker is not installed
+(! command_exists docker) && command_exists podman && alias docker=podman
+
 # Outside AWS this is much trickier, so functions are required (see .functions)
 alias create_repo_aws="aws --region us-west-2 codecommit create-repository --repository-name"
 

@@ -26,6 +26,9 @@ command_exists gpg2 && alias gpg=gpg2
 # Always use less if available
 command_exists less && alias more=less
 
+# Always prefer bat over cat if available
+command_exists bat && alias cat=bat && alias less=bat && alias more=bat
+
 # Always prefer vim over vi (if available)
 command_exists vim && alias vi=vim
 # Always prefer nvim over vim (if available)

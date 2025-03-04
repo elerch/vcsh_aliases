@@ -1,6 +1,6 @@
-if command_exists exa; then
+if command_exists eza; then
   export DISABLE_LS_COLORS=true # needed so oh-my-bash-zsh doesn't redefine this
-  alias ls="exa"
+  alias ls="eza"
   alias ll="ls -lag"
 else
   alias ll="ls -la"

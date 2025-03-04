@@ -1,8 +1,10 @@
 if command_exists exa; then
   export DISABLE_LS_COLORS=true # needed so oh-my-bash-zsh doesn't redefine this
   alias ls="exa"
+  alias ll="ls -lag"
+else
+  alias ll="ls -la"
 fi
-alias ll="ls -la"
 
 # Best keygen options go here
 # -o uses bcrypt for key derivation

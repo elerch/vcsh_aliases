@@ -1,7 +1,7 @@
 if command_exists eza; then
   export DISABLE_LS_COLORS=true # needed so oh-my-bash-zsh doesn't redefine this
-  alias ls="eza"
-  alias ll="ls -lag --icons --git --git-repos"
+  alias ls="eza --icons"
+  alias ll="ls -lag --git --git-repos"
 else
   alias ll="ls -la"
 fi

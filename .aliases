@@ -1,3 +1,5 @@
+# vi: ft=bash
+
 if command_exists eza; then
   export DISABLE_LS_COLORS=true # needed so oh-my-bash-zsh doesn't redefine this
   alias ls="eza --icons"

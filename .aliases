@@ -93,3 +93,4 @@ alias java_mvn_new_console='mvn archetype:generate -DarchetypeGroupId=org.apache
 alias quoted_print_decode="perl -MMIME::QuotedPrint=decode_qp -e 'print decode_qp join\"\",<>'"
 alias extract_text_plain_mime='perl -n -e'"'"'(/boundary="([^"]*)"/) && ($boundary="--$1");/Content-Type: +text\/plain/ && ($intext=1);$intext==1 && !/\Q$boundary/ && (print); /\Q$boundary/ && ($intext=0)'"'"
 alias psgrep='ps -uax |head -1 && ps -uax |grep -v grep|grep '
+alias opencode='[ -z "$AWS_BEARER_TOKEN_BEDROCK" ] && eval $(get_secret bedrock); opencode'
